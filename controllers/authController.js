@@ -71,8 +71,8 @@ const Login = async (req, res) => {
           return res
             .cookie("userToken", token, {
               httpOnly: true,
-              secure: process.env.NODE_ENV === "production", // only set secure flag in production
-              sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+              secure: true, // only set secure flag in production
+              sameSite: "None",
             })
             .json({ success: "Successfully logged In. Welcome Back!" });
         }
