@@ -14,7 +14,10 @@ const canvasModel = require('./models/canvas')
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://hackathon-project-manager.onrender.com",
+    origin: [
+      "http://localhost:5173",
+      "https://hackathon-project-manager.onrender.com",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
@@ -38,7 +41,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
     credentials: true,
-    origin: "https://hackathon-project-manager.onrender.com",
+    origin: [
+      "http://localhost:5173",
+      "https://hackathon-project-manager.onrender.com",
+    ],
   })
 );
 
