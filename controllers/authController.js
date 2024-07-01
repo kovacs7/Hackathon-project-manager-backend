@@ -69,7 +69,11 @@ const Login = async (req, res) => {
             console.log("Error in JWT token fn :", err);
           }
           return res
-            .cookie("userToken", token)
+            .cookie("userToken", token, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === "production", // only set secure flag in production
+              sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+            })
             .json({ success: "Successfully logged In. Welcome Back!" });
         }
       );
