@@ -13,7 +13,7 @@ router.post("/signup", SignUp);
 
 router.post("/login", Login);
 
-router.get("/accountsinfo", AccountsInfo);
+router.post("/accountsinfo", AccountsInfo);
 
 router.get("/users/search", searchUsers);
 

@@ -51,7 +51,7 @@ const Login = async (req, res) => {
         error: "The user does not exist.\nPlease sign up first.",
       });
     }
-    console.log(userExist);
+
     const checkPassword = await comparePassword(password, userExist.password);
 
     if (checkPassword) {
@@ -63,36 +63,27 @@ const Login = async (req, res) => {
           _id: userExist._id,
         },
         process.env.JWT_SECRET,
-        {},
-        function (err, token) {
-          if (err) {
-            console.log("Error in JWT token fn :", err);
-          }
-          return res
-            .cookie("userToken", token, {
-              httpOnly: true,
-              secure: process.env.NODE_ENV === "production", // only set secure flag in production
-              sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-            })
-            .json({ success: "Successfully logged In. Welcome Back!" });
-        }
+        {}
       );
-    }
-    if (!checkPassword) {
+
+      return res.json({ token }); // Send token directly to client
+    } else {
       return res.json({ error: "Incorrect password. Please try again." });
     }
   } catch (error) {
-    res.json({ error: "Error occured while logging in." });
+    console.error("Error occurred while logging in:", error);
+    res.json({ error: "Error occurred while logging in." });
   }
 };
 
 const AccountsInfo = (req, res) => {
-  const { userToken } = req.cookies;
+  const { userToken } = req.body;
+
   if (userToken) {
     jwt.verify(userToken, process.env.JWT_SECRET, function (err, decoded) {
       if (err) {
         return res.json({
-          error: "Error occured while JWT token Authentication.",
+          error: "Error occurred while JWT token Authentication.",
         });
       }
       return res.json(decoded);
